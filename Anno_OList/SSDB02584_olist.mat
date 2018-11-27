@@ -1,0 +1,14 @@
+ObjectListFormat2.0 
+2 objectypes
+road
+1 masks
+poly 1 has 6 coordinates
+6 1270 1267 774 10 6 
+443 238 535 957 959 443 
+
+sidewalk
+1 masks
+poly 1 has 6 coordinates
+10 13 13 1218 1243 10 
+445 416 401 236 247 445 
+

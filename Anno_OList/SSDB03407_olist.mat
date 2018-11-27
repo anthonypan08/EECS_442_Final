@@ -1,0 +1,32 @@
+ObjectListFormat2.0 
+5 objectypes
+tree
+1 masks
+poly 1 has 9 coordinates
+609 379 1 1 140 397 533 484 609 
+146 -1 3 566 635 537 412 323 146 
+
+road
+1 masks
+poly 1 has 5 coordinates
+8 1276 1283 -14 8 
+720 758 961 950 720 
+
+pedestrian
+1 masks
+poly 1 has 5 coordinates
+957 966 1015 1035 957 
+713 528 495 713 713 
+
+sidewalk
+1 masks
+poly 1 has 6 coordinates
+8 1283 1285 258 -5 8 
+713 756 711 689 691 713 
+
+sky
+1 masks
+poly 1 has 25 coordinates
+769 781 723 767 810 772 765 740 723 698 689 680 644 638 591 551 544 546 497 497 636 649 660 627 769 
+3 128 204 231 410 412 343 329 318 316 332 352 390 430 450 448 410 358 332 262 260 229 184 177 3 
+

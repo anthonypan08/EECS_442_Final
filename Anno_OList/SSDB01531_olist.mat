@@ -1,0 +1,29 @@
+ObjectListFormat2.0 
+4 objectypes
+road
+1 masks
+poly 1 has 9 coordinates
+711 888 852 1283 1272 656 455 455 711 
+483 483 506 628 794 622 539 539 483 
+
+sidewalk
+1 masks
+poly 1 has 11 coordinates
+22 265 421 464 452 1294 1276 932 350 350 22 
+591 555 515 519 553 794 966 957 617 617 591 
+
+sky
+1 masks
+poly 1 has 8 coordinates
+15 892 662 426 303 13 13 15 
+8 10 218 227 151 142 142 8 
+
+tree
+2 masks
+poly 1 has 7 coordinates
+586 854 792 658 511 511 586 
+396 441 -19 -12 327 327 396 
+poly 2 has 9 coordinates
+1124 814 785 897 1308 1308 1254 1254 1124 
+461 461 55 -30 -12 363 421 421 461 
+

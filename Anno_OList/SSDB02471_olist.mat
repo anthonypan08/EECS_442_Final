@@ -1,0 +1,32 @@
+ObjectListFormat2.0 
+5 objectypes
+car
+1 masks
+poly 1 has 8 coordinates
+749 901 957 948 915 776 745 749 
+229 229 213 151 104 104 157 229 
+
+building
+1 masks
+poly 1 has 5 coordinates
+1 531 531 -10 1 
+3 1 211 233 3 
+
+road
+1 masks
+poly 1 has 9 coordinates
+1053 1274 1265 1153 1033 571 -5 -14 1053 
+945 343 265 153 191 273 394 959 945 
+
+sidewalk
+1 masks
+poly 1 has 5 coordinates
+1149 1042 6 15 1149 
+155 155 338 392 155 
+
+tree
+1 masks
+poly 1 has 9 coordinates
+245 162 120 95 475 477 452 452 245 
+142 142 137 19 1 84 137 140 142 
+

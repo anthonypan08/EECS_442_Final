@@ -1,0 +1,38 @@
+ObjectListFormat2.0 
+5 objectypes
+sidewalk
+2 masks
+poly 1 has 5 coordinates
+946 794 738 1033 946 
+722 787 961 961 722 
+poly 2 has 12 coordinates
+957 486 316 4 -1 97 502 720 881 903 912 957 
+678 709 716 787 731 702 678 662 653 653 653 678 
+
+road
+1 masks
+poly 1 has 9 coordinates
+957 812 723 1 10 176 490 970 957 
+720 771 961 966 814 747 702 662 720 
+
+building
+1 masks
+poly 1 has 5 coordinates
+82 792 745 10 82 
+262 236 597 512 262 
+
+car
+1 masks
+poly 1 has 8 coordinates
+301 377 477 461 379 289 289 301 
+655 662 653 617 577 602 613 655 
+
+tree
+2 masks
+poly 1 has 8 coordinates
+176 441 439 185 42 -3 -3 176 
+530 334 253 146 17 15 539 530 
+poly 2 has 9 coordinates
+995 1281 1283 368 408 551 828 828 995 
+553 624 3 3 307 501 477 477 553 
+

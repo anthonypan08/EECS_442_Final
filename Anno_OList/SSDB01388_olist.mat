@@ -1,0 +1,23 @@
+ObjectListFormat2.0 
+3 objectypes
+pedestrian
+1 masks
+poly 1 has 6 coordinates
+676 716 716 676 676 676 
+653 653 532 532 535 653 
+
+sidewalk
+1 masks
+poly 1 has 6 coordinates
+673 747 1196 564 564 673 
+593 593 959 959 959 593 
+
+tree
+2 masks
+poly 1 has 7 coordinates
+6 383 658 609 6 6 6 
+472 477 209 -10 -10 -10 472 
+poly 2 has 7 coordinates
+609 667 966 1270 1270 1270 609 
+3 256 278 271 -12 -12 3 
+

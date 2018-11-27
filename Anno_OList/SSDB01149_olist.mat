@@ -1,0 +1,17 @@
+ObjectListFormat2.0 
+2 objectypes
+tree
+2 masks
+poly 1 has 6 coordinates
+28 620 685 13 13 28 
+23 66 470 457 457 23 
+poly 2 has 8 coordinates
+649 636 1276 1272 946 1049 1049 649 
+44 15 21 519 512 122 119 44 
+
+sky
+1 masks
+poly 1 has 6 coordinates
+618 1004 966 662 662 618 
+61 84 309 269 269 61 
+

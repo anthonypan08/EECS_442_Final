@@ -1,0 +1,26 @@
+ObjectListFormat2.0 
+4 objectypes
+pedestrian
+1 masks
+poly 1 has 6 coordinates
+102 176 176 129 129 102 
+524 524 392 392 392 524 
+
+road
+1 masks
+poly 1 has 10 coordinates
+28 573 756 924 1198 1267 1276 8 8 28 
+497 503 508 508 481 465 952 963 963 497 
+
+sky
+1 masks
+poly 1 has 6 coordinates
+42 -3 1270 1272 1265 42 
+253 17 3 238 238 253 
+
+store
+1 masks
+poly 1 has 6 coordinates
+209 209 1151 1151 1151 209 
+461 298 327 472 472 461 
+

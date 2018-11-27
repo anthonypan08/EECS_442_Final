@@ -1,0 +1,50 @@
+ObjectListFormat2.0 
+6 objectypes
+pedestrian
+3 masks
+poly 1 has 5 coordinates
+537 665 651 506 537 
+506 501 771 774 506 
+poly 2 has 5 coordinates
+446 553 531 444 446 
+468 474 771 751 468 
+poly 3 has 5 coordinates
+370 464 448 356 370 
+477 490 756 751 477 
+
+building
+2 masks
+poly 1 has 7 coordinates
+1270 1174 1162 839 792 1272 1270 
+21 26 282 432 490 459 21 
+poly 2 has 6 coordinates
+627 660 598 8 24 627 
+510 106 10 17 604 510 
+
+sky
+2 masks
+poly 1 has 5 coordinates
+1082 1187 1149 1035 1082 
+21 6 227 309 21 
+poly 2 has 5 coordinates
+636 772 756 658 636 
+21 23 436 285 21 
+
+sidewalk
+1 masks
+poly 1 has 7 coordinates
+631 743 964 4 71 526 631 
+519 501 894 941 604 586 519 
+
+store
+1 masks
+poly 1 has 5 coordinates
+15 747 705 66 15 
+305 459 544 586 305 
+
+tree
+1 masks
+poly 1 has 7 coordinates
+647 982 783 720 772 651 647 
+37 44 972 972 332 177 37 
+

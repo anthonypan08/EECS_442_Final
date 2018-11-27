@@ -1,0 +1,29 @@
+ObjectListFormat2.0 
+4 objectypes
+car
+1 masks
+poly 1 has 17 coordinates
+15 285 470 466 421 401 314 247 211 140 104 89 35 10 1 1 15 
+785 827 738 588 546 517 499 497 497 497 497 508 550 602 675 675 785 
+
+sidewalk
+1 masks
+poly 1 has 6 coordinates
+781 832 812 127 127 781 
+526 528 966 952 952 526 
+
+tree
+2 masks
+poly 1 has 6 coordinates
+33 330 444 -25 -25 33 
+401 305 -3 -1 -1 401 
+poly 2 has 6 coordinates
+419 841 982 372 370 419 
+189 419 26 1 1 189 
+
+pedestrian
+1 masks
+poly 1 has 6 coordinates
+769 814 814 783 783 769 
+573 573 472 472 472 573 
+

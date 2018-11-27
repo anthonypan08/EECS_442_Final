@@ -1,0 +1,17 @@
+ObjectListFormat2.0 
+2 objectypes
+road
+1 masks
+poly 1 has 8 coordinates
+430 776 1279 1279 15 13 13 430 
+486 486 718 972 968 657 657 486 
+
+tree
+2 masks
+poly 1 has 6 coordinates
+109 569 555 10 10 109 
+267 182 -10 -3 -3 267 
+poly 2 has 8 coordinates
+566 694 1124 1256 1279 1274 1274 566 
+17 236 238 231 23 6 6 17 
+

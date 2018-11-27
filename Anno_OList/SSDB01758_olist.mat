@@ -1,0 +1,26 @@
+ObjectListFormat2.0 
+4 objectypes
+building
+1 masks
+poly 1 has 6 coordinates
+843 839 -19 -10 -10 843 
+8 760 753 -1 -1 8 
+
+road
+1 masks
+poly 1 has 5 coordinates
+10 1281 1281 -3 10 
+807 827 968 959 807 
+
+sidewalk
+1 masks
+poly 1 has 5 coordinates
+22 1267 1272 15 22 
+805 836 769 729 805 
+
+store
+1 masks
+poly 1 has 5 coordinates
+812 839 -7 -7 812 
+334 762 716 338 334 
+

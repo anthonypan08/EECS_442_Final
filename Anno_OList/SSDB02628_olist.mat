@@ -1,0 +1,17 @@
+ObjectListFormat2.0 
+2 objectypes
+car
+2 masks
+poly 1 has 8 coordinates
+751 1002 1087 1064 981 623 621 751 
+465 459 561 738 821 782 582 465 
+poly 2 has 8 coordinates
+485 721 774 676 538 536 414 485 
+382 371 469 567 584 546 503 382 
+
+pedestrian
+1 masks
+poly 1 has 7 coordinates
+1153 1192 1219 1217 1153 1132 1153 
+418 369 403 574 582 465 418 
+

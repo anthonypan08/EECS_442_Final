@@ -1,0 +1,23 @@
+ObjectListFormat2.0 
+3 objectypes
+road
+1 masks
+poly 1 has 6 coordinates
+283 1274 1281 223 223 283 
+582 573 963 941 941 582 
+
+sidewalk
+1 masks
+poly 1 has 6 coordinates
+314 314 1276 1276 1276 314 
+570 521 517 573 573 570 
+
+building
+2 masks
+poly 1 has 6 coordinates
+593 555 1301 1274 1274 593 
+474 -12 -6 506 506 474 
+poly 2 has 6 coordinates
+8 493 468 -32 -32 8 
+501 519 -10 -8 -8 501 
+

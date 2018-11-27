@@ -1,0 +1,26 @@
+ObjectListFormat2.0 
+3 objectypes
+building
+2 masks
+poly 1 has 5 coordinates
+682 662 1267 1270 682 
+21 459 765 15 21 
+poly 2 has 5 coordinates
+586 618 46 57 586 
+23 526 916 50 23 
+
+road
+1 masks
+poly 1 has 4 coordinates
+669 1247 569 669 
+407 908 950 407 
+
+sidewalk
+2 masks
+poly 1 has 4 coordinates
+671 1281 1265 671 
+450 957 769 450 
+poly 2 has 4 coordinates
+653 560 245 653 
+436 939 950 436 
+

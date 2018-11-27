@@ -1,0 +1,26 @@
+ObjectListFormat2.0 
+4 objectypes
+bicycle
+1 masks
+poly 1 has 9 coordinates
+406 636 636 571 511 417 399 399 406 
+655 738 544 430 376 401 582 588 655 
+
+road
+1 masks
+poly 1 has 6 coordinates
+26 1274 1272 8 8 26 
+465 631 959 961 961 465 
+
+building
+1 masks
+poly 1 has 7 coordinates
+214 214 432 783 778 778 214 
+428 117 -37 -10 470 470 428 
+
+sky
+1 masks
+poly 1 has 6 coordinates
+8 8 129 118 118 8 
+287 10 8 227 227 287 
+

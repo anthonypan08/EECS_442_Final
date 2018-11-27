@@ -1,0 +1,20 @@
+ObjectListFormat2.0 
+3 objectypes
+car
+1 masks
+poly 1 has 7 coordinates
+97 363 397 350 113 113 97 
+695 691 646 486 497 497 695 
+
+sidewalk
+1 masks
+poly 1 has 6 coordinates
+490 665 950 1 1 490 
+548 548 957 950 950 548 
+
+tree
+1 masks
+poly 1 has 8 coordinates
+44 577 711 703 703 -36 -36 44 
+378 457 262 30 -8 -12 -12 378 
+
