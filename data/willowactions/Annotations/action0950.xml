@@ -1,0 +1,30 @@
+<annotation>
+	<filename>action0950.jpg</filename>
+	<originalfile>3987971045_03216ec932.jpg</originalfile>
+	<folder>Willow-actions</folder>
+	<source>
+		<annotation>Willow-actions</annotation>
+		<database>Willow-actions</database>
+		<image>flickr</image>
+		<flickrid>3987971045</flickrid>
+	</source>
+	<segmented>0</segmented>
+	<size>
+		<width>499</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<object>
+		<name>person</name>
+		<bndbox>
+			<xmin>220</xmin>
+			<ymin>88</ymin>
+			<xmax>392</xmax>
+			<ymax>428</ymax>
+		</bndbox>
+		<pose>Unspecified</pose>
+		<difficult>0</difficult>
+		<truncated>0</truncated>
+		<occluded>0</occluded>
+	</object>
+</annotation>
