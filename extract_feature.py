@@ -13,44 +13,16 @@ from sklearn.preprocessing import StandardScaler
 from descriptor import Descriptor
 
 
-def process_files(pos_dir, neg_dir, color_space="bgr", channels=[0, 1, 2], hog_features=False, size=(64, 64),
+def process_files(pos_dir, neg_dir, hog_features=True, size=(64, 64),
                   hog_bins=9, pix_per_cell=(8, 8), cells_per_block=(2, 2), block_stride=None, block_norm="L1",
                   transform_sqrt=True, signed_gradient=False):
     """
+    Extract features from positive and negative directories and store feature info to a dict.
 
-    :param pos_dir:
-    :param neg_dir:
-    :param color_space:
-    :param channels:
-    :param hog_features:
-    :param size:
-    :param hog_bins:
-    :param pix_per_cell:
-    :param cells_per_block:
-    :param block_stride:
-    :param block_norm:
-    :param transform_sqrt:
-    :param signed_gradient:
-    :return:
-    """
-    """
-    Extract features from positive samples and negative samples.
-    Store feature vectors in a dict and optionally save to pickle file.
-
-    @param pos_dir (str): Path to directory containing positive samples.
-    @param neg_dir (str): Path to directory containing negative samples.
-    @param color_space (str): Color space conversion.
-    @param channels (list): Image channel indices to use.
-    
-    For remaining arguments, refer to Descriptor class:
-    @see descriptor.Descriptor#__init__(...)
-
-    @return feature_data (dict): Lists of sample features split into training,
-        cross-validation, test sets; scaler object; parameters used to
-        construct descriptor and process images.
-
-    NOTE: OpenCV HOGDescriptor currently only supports 1-channel and 3-channel
-    images, not 2-channel images.
+    :param pos_dir: path to directory containing positive samples.
+    :param neg_dir: path to directory containing negative samples.
+    :param hog_features: boolean value for hog features in descriptor
+    :return: dictionary containing training, cross-validation, test sets
     """
 
     pos_dir = os.path.abspath(pos_dir)
@@ -76,6 +48,7 @@ def process_files(pos_dir, neg_dir, color_space="bgr", channels=[0, 1, 2], hog_f
                             transform_sqrt=transform_sqrt, signed_gradient=signed_gradient)
 
     # iterate through files and extract features
+    channels = [0, 1, 2]
     for i, filepath in enumerate(pos_files + neg_files):
         image = cv2.imread(filepath)
         if image is None:
@@ -91,9 +64,6 @@ def process_files(pos_dir, neg_dir, color_space="bgr", channels=[0, 1, 2], hog_f
         else:
             neg_features.append(feature_vector)
     print("Features extracted from {} files\n".format(len(pos_features) + len(neg_features)))
-
-    # store the length of the feature vector produced by the descriptor
-    num_features = len(pos_features[0])
 
     # instantiate scaler and scale features.
     scaler = StandardScaler().fit(pos_features + neg_features)
@@ -169,7 +139,8 @@ def train_adaboost(feature_data=None, n_estimators=50, base_estimator=None,
     # train classifier
     train_set = np.vstack((pos_train, neg_train))
     train_labels = np.concatenate((np.ones(pos_train.shape[0],), np.zeros(neg_train.shape[0],)))
-    classifier = AdaBoostClassifier(base_estimator=base_estimator, learning_rate=learning_rate, n_estimators=n_estimators)
+    classifier = AdaBoostClassifier(base_estimator=base_estimator, learning_rate=learning_rate,
+                                    n_estimators=n_estimators)
     classifier.fit(train_set, train_labels)
     print("Classifier trained!")
 
@@ -229,7 +200,7 @@ def train_adaboost(feature_data=None, n_estimators=50, base_estimator=None,
 def main():
     pos_dir = "data/positive"
     neg_dir = "data/negative"
-    feature = process_files(pos_dir, neg_dir, hog_features=True)
+    feature = process_files(pos_dir, neg_dir)
     train_adaboost(feature_data=feature, n_estimators=100)
 
 
