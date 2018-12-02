@@ -1,0 +1,30 @@
+<annotation>
+	<filename>action0472.jpg</filename>
+	<originalfile>2449883747_8a15c222aa_o.jpg</originalfile>
+	<folder>Willow-actions</folder>
+	<source>
+		<annotation>Willow-actions</annotation>
+		<database>Willow-actions</database>
+		<image>flickr</image>
+		<flickrid>2449883747</flickrid>
+	</source>
+	<segmented>0</segmented>
+	<size>
+		<width>500</width>
+		<height>334</height>
+		<depth>3</depth>
+	</size>
+	<object>
+		<name>person</name>
+		<bndbox>
+			<xmin>24</xmin>
+			<ymin>67</ymin>
+			<xmax>228</xmax>
+			<ymax>333</ymax>
+		</bndbox>
+		<pose>Right</pose>
+		<difficult>0</difficult>
+		<truncated>0</truncated>
+		<occluded>0</occluded>
+	</object>
+</annotation>
