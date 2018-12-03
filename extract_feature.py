@@ -2,8 +2,6 @@ from datetime import datetime
 import os
 import pickle
 import random
-import time
-import warnings
 import cv2
 import numpy as np
 from sklearn import svm
@@ -201,7 +199,7 @@ def main():
     pos_dir = "data/positive"
     neg_dir = "data/negative"
     feature = process_files(pos_dir, neg_dir)
-    train_adaboost(feature_data=feature, n_estimators=100)
+    train_adaboost(feature_data=feature, n_estimators=100, output_model=True, output_filename="temp_classifier.pkl")
 
 
 if __name__ == "__main__":
