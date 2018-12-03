@@ -37,7 +37,6 @@ class Detector:
 
         feature_vectors = self.scaler.transform(feature_vectors)
         predictions = self.model.predict(feature_vectors)
-        print(predictions)
 
         return [windows[i[0]] for i in np.argwhere(predictions)]
 
@@ -46,11 +45,17 @@ def draw_windows(img, windows):
     for window in windows:
         cv2.rectangle(img, (window[0], window[1]), (window[2], window[3]), (255, 0, 0), 2)
         plt.imshow(np.array(img).astype('uint8'))
-        break
     plt.show()
 
 
-def sliding_window(img_size, init_size=(128, 128), x_step=0.05, y_step=0.05, scale=1.1):
+def draw_centers(img, windows):
+    for window in windows:
+        cv2.circle(img, (int(window[0] + window[2] / 2), int(window[1] + window[3] / 2)), 3, (255, 0, 0), 3)
+        plt.imshow(np.array(img).astype('uint8'))
+    plt.show()
+
+
+def sliding_window(img_size, init_size=(256, 256), x_step=0.05, y_step=0.05, scale=1.1):
     windows = []
     width, height = img_size[0], img_size[1]
     window_width, window_height = init_size[0], init_size[1]
@@ -68,9 +73,9 @@ def sliding_window(img_size, init_size=(128, 128), x_step=0.05, y_step=0.05, sca
 
 def main():
     detector = Detector("temp_classifier.pkl", "temp_data.pkl")
-    img = cv2.imread("data/willowactions/action0364.jpg")
+    img = cv2.imread("data/MIT_no bike/SSDB03523.JPG")
     windows = detector.detect_windows(img)
-    draw_windows(img, windows)
+    draw_centers(img, windows)
 
 
 if __name__ == '__main__':
