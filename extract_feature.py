@@ -13,14 +13,16 @@ from descriptor import Descriptor
 
 def process_files(pos_dir, neg_dir, hog_features=True, size=(64, 64),
                   hog_bins=9, pix_per_cell=(8, 8), cells_per_block=(2, 2), block_stride=None, block_norm="L1",
-                  transform_sqrt=True, signed_gradient=False):
+                  transform_sqrt=True, signed_gradient=False, output_file=False, output_filename=None):
     """
     Extract features from positive and negative directories and store feature info to a dict.
 
     :param pos_dir: path to directory containing positive samples.
     :param neg_dir: path to directory containing negative samples.
-    :param hog_features: boolean value for hog features in descriptor
-    :return: dictionary containing training, cross-validation, test sets
+    :param hog_features: boolean value for hog features in descriptor.
+    :param output_file: boolean value for saving descriptor to file.
+    :param output_filename: name of output file.
+    :return: dictionary containing training, cross-validation, test sets.
     """
 
     pos_dir = os.path.abspath(pos_dir)
@@ -107,7 +109,22 @@ def process_files(pos_dir, neg_dir, hog_features=True, size=(64, 64),
         "neg_val": neg_val,
         "pos_test": pos_test,
         "neg_test": neg_test,
+        "scaler": scaler,
+        "hog_features": hog_features,
+        "size": size,
+        "hog_bins": hog_bins,
+        "pix_per_cell": pix_per_cell,
+        "cells_per_block": cells_per_block,
+        "block_stride": block_stride,
+        "block_norm": block_norm,
+        "transform_sqrt": transform_sqrt,
+        "signed_gradient": signed_gradient
     }
+
+    if output_file:
+        if output_filename is None:
+            output_filename = (datetime.now().strftime("%Y%m%d%H%M") + "_data.pkl")
+        pickle.dump(feature_data, open(output_filename, "wb"))
 
     return feature_data
 
@@ -190,7 +207,6 @@ def train_adaboost(feature_data=None, n_estimators=50, base_estimator=None,
         if output_filename is None:
             output_filename = (datetime.now().strftime("%Y%m%d%H%M") + "_classifier.pkl")
         pickle.dump(classifier, open(output_filename, "wb"))
-        print("\nAdaboost classifier data saved to {}".format(output_filename))
 
     return None
 
@@ -198,7 +214,7 @@ def train_adaboost(feature_data=None, n_estimators=50, base_estimator=None,
 def main():
     pos_dir = "data/positive"
     neg_dir = "data/negative"
-    feature = process_files(pos_dir, neg_dir)
+    feature = process_files(pos_dir, neg_dir, output_file=True, output_filename="temp_data.pkl")
     train_adaboost(feature_data=feature, n_estimators=100, output_model=True, output_filename="temp_classifier.pkl")
 
 
