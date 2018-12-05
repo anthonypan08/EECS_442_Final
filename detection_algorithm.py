@@ -15,25 +15,43 @@ def mean_shift(rect_list):
     band = 1
     clustering = MeanShift(bandwidth=band).fit(rect_list)
     labels = clustering.labels_
-    tally = np.zeros(clustering.cluster_centers_.length)
-    to_merge_center_idx = []
 
+    tally = np.zeros(clustering.cluster_centers_.shape[0])
+    to_merge_center_idx = []
+    print (clustering.cluster_centers_)
+    print (clustering.labels_)
     for i in labels:
         tally[i] += 1
+
+    tally = tally.reshape(-1,1)
     clustering_tally = SpectralClustering(n_clusters=2, assign_labels="discretize", random_state=0).fit(tally)
 
-    max_ind = np.argmax(tally)
+    max_ind = np.argwhere(tally.flatten() == np.max(tally)).flatten()
+
     max_ind = clustering_tally.labels_[max_ind]
+    print (max_ind)
+
+    print (clustering_tally.labels_)
+    print (tally)
 
     for idx, i in enumerate(clustering_tally.labels_):
-        if i == max_ind:
-            to_merge_center_idx.append(tally[idx])
-    to_merge_points [] * to_merge_center_idx.length
+        print (i)
+        if i in max_ind:
+            to_merge_center_idx.append(idx)
+    print (to_merge_center_idx)
+    to_merge_points = [[] for i in range(len(clustering.cluster_centers_))]
 
-    for idx, i in enumerate(labels):
+    print (to_merge_points)
+    ##work on the indexing issues
+    for idx, i in enumerate(clustering.labels_):
+
         if i in to_merge_center_idx:
-            to_merge_points[i].append(rect_list[idx])
+            print ("###",i)
+            print(labels[idx])
 
+            to_merge_points[labels[idx]].append(rect_list[idx])
+
+    to_merge_points = [x for x in to_merge_points if x]
     to_merge_points = np.asarray(to_merge_points)
 
     return to_merge_points
@@ -55,3 +73,4 @@ def mean_shift(rect_list):
 
         iter += 1
     """
+print (mean_shift(np.array([[1, 1], [2, 1], [1, 0],[5,6],[6,6],[40, 7], [40, 6], [39, 6]])))
