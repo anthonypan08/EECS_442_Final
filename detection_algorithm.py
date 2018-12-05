@@ -17,7 +17,7 @@ def mean_shift(rect_list):
     labels = clustering.labels_
 
     tally = np.zeros(clustering.cluster_centers_.shape[0])
-    to_merge_center_idx = []
+
     print (clustering.cluster_centers_)
     print (clustering.labels_)
     for i in labels:
@@ -28,24 +28,20 @@ def mean_shift(rect_list):
 
     max_ind = np.argwhere(tally.flatten() == np.max(tally)).flatten()
 
-    max_ind = clustering_tally.labels_[max_ind]
-    print (max_ind)
+    
+    print("@@@",max_ind)
+    to_merge_center = [clustering.cluster_centers_[x] for x in max_ind ]
 
     print (clustering_tally.labels_)
     print (tally)
 
-    for idx, i in enumerate(clustering_tally.labels_):
-        print (i)
-        if i in max_ind:
-            to_merge_center_idx.append(idx)
-    print (to_merge_center_idx)
     to_merge_points = [[] for i in range(len(clustering.cluster_centers_))]
 
     print (to_merge_points)
     ##work on the indexing issues
     for idx, i in enumerate(clustering.labels_):
 
-        if i in to_merge_center_idx:
+        if i in max_ind:
             print ("###",i)
             print(labels[idx])
 
@@ -54,7 +50,9 @@ def mean_shift(rect_list):
     to_merge_points = [x for x in to_merge_points if x]
     to_merge_points = np.asarray(to_merge_points)
 
-    return to_merge_points
+    print(to_merge_center)
+    print(to_merge_points)
+    return (to_merge_center, to_merge_points)
 
 
     """
@@ -73,4 +71,4 @@ def mean_shift(rect_list):
 
         iter += 1
     """
-print (mean_shift(np.array([[1, 1], [2, 1], [1, 0],[5,6],[6,6],[40, 7], [40, 6], [39, 6]])))
+print (mean_shift(np.array([[1, 1], [2, 1], [1, 0],[5,6],[6,6],[40, 7], [40, 6], [39, 6]]))[0])
