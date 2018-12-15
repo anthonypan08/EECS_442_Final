@@ -11,132 +11,121 @@ from sklearn.preprocessing import StandardScaler
 from descriptor import Descriptor
 
 
-def process_files(pos_dir, neg_dir, color_space="bgr", channels=[0, 1, 2], hog_features=False, hist_features=False,
-                  spatial_features=False, size=(64, 64), hog_bins=9, pix_per_cell=(8, 8), cells_per_block=(2, 2),
-                  hist_bins=16, spatial_size=(16, 16)):
+def process_files(positive_dir, negative_dir, color_space="bgr", channels=[0, 1, 2], hog=False, histogram=False,
+                  spatial=False, hog_size=(64, 64), hog_bins=9, cell_size=(8, 8), cells_per_block=(2, 2),
+                  histogram_bins=16, spatial_size=(16, 16)):
     # take care of training files
-    pos_dir = os.path.abspath(pos_dir)
-    neg_dir = os.path.abspath(neg_dir)
-    if not os.path.isdir(pos_dir):
-        raise FileNotFoundError("Directory " + pos_dir + " does not exist.")
-    if not os.path.isdir(neg_dir):
-        raise FileNotFoundError("Directory " + neg_dir + " does not exist.")
-    pos_files = [os.path.join(pos_dir, file) for file in os.listdir(pos_dir)
-                 if os.path.isfile(os.path.join(pos_dir, file))]
-    neg_files = [os.path.join(neg_dir, file) for file in os.listdir(neg_dir)
-                 if os.path.isfile(os.path.join(neg_dir, file))]
-    print("{} positive files and {} negative files found.\n".format(
-        len(pos_files), len(neg_files)))
+    positive_dir = os.path.abspath(positive_dir)
+    negative_dir = os.path.abspath(negative_dir)
+    if not os.path.isdir(positive_dir):
+        raise FileNotFoundError("Directory " + positive_dir + " not found.")
+    if not os.path.isdir(negative_dir):
+        raise FileNotFoundError("Directory " + negative_dir + " not found.")
+    positive_files = [os.path.join(positive_dir, file) for file in os.listdir(positive_dir)
+                      if os.path.isfile(os.path.join(positive_dir, file))]
+    negative_files = [os.path.join(negative_dir, file) for file in os.listdir(negative_dir)
+                      if os.path.isfile(os.path.join(negative_dir, file))]
+    print("{} positive files and {} negative files found.\n".format(len(positive_files), len(negative_files)))
 
     # color space info
     color_space = color_space.lower()
     if color_space == "hls":
-        cv_color_const = cv2.COLOR_BGR2HLS
+        color_const = cv2.COLOR_BGR2HLS
     elif color_space == "hsv":
-        cv_color_const = cv2.COLOR_BGR2HSV
-    elif color_space == "lab":
-        cv_color_const = cv2.COLOR_BGR2Lab
+        color_const = cv2.COLOR_BGR2HSV
     elif color_space == "luv":
-        cv_color_const = cv2.COLOR_BGR2Luv
+        color_const = cv2.COLOR_BGR2Luv
     elif color_space == "ycrcb" or color_space == "ycc":
-        cv_color_const = cv2.COLOR_BGR2YCrCb
+        color_const = cv2.COLOR_BGR2YCrCb
     elif color_space == "yuv":
-        cv_color_const = cv2.COLOR_BGR2YUV
+        color_const = cv2.COLOR_BGR2YUV
     else:
-        cv_color_const = -1
+        color_const = -1
 
-    # Store feature vectors for positive samples in list pos_features and
-    # for negative samples in neg_features.
-    pos_features = []
-    neg_features = []
-    start_time = time.time()
+    # store feature vectors for both positive and negative files
+    positive_features = []
+    negative_features = []
+    time_begin = time.time()
 
-    # Get feature descriptor object to call on each sample.
-    descriptor = Descriptor(hog_features=hog_features, hist_features=hist_features, spatial_features=spatial_features,
-                            window_size=size, hog_bins=hog_bins, cell_size=pix_per_cell,
-                            cells_per_block=cells_per_block, hist_bins=hist_bins, spatial_size=spatial_size)
+    # create feature descriptor object
+    descriptor = Descriptor(hog=hog, histogram=histogram, spatial=spatial, hog_size=hog_size, hog_bins=hog_bins,
+                            cell_size=cell_size, cells_per_block=cells_per_block, histogram_bins=histogram_bins,
+                            spatial_size=spatial_size)
 
-    # Iterate through files and extract features.
-    for i, file_path in enumerate(pos_files + neg_files):
+    # extract features from each file
+    for i, file_path in enumerate(positive_files + negative_files):
         image = cv2.imread(file_path)
         if image is None:
             continue
 
-        if cv_color_const > -1:
-            image = cv2.cvtColor(image, cv_color_const)
+        if color_const > -1:
+            image = cv2.cvtColor(image, color_const)
 
         feature_vector = descriptor.get_features(image)
 
-        if i < len(pos_files):
-            pos_features.append(feature_vector)
+        if i < len(positive_files):
+            positive_features.append(feature_vector)
         else:
-            neg_features.append(feature_vector)
+            negative_features.append(feature_vector)
 
-    print("Features extracted from {} files in {:.1f} seconds\n".format(
-        len(pos_features) + len(neg_features), time.time() - start_time))
+    print("Features extraction completed in {:.1f} seconds\n".format(time.time() - time_begin))
 
-    # Store the length of the feature vector produced by the descriptor.
-    num_features = len(pos_features[0])
+    num_features = len(positive_features[0])
 
-    # Instantiate scaler and scale features.
-    print("Scaling features.\n")
-    scaler = StandardScaler().fit(pos_features + neg_features)
-    pos_features = scaler.transform(pos_features)
-    neg_features = scaler.transform(neg_features)
+    # scale features
+    scaler = StandardScaler().fit(positive_features + negative_features)
+    positive_features = scaler.transform(positive_features)
+    negative_features = scaler.transform(negative_features)
     
-    # Randomize lists of feature vectors. Split 75/20/5 into training,
-    # cross-validation, and test sets.
-    print("Shuffling samples into training, cross-validation, and test sets.\n")
-    random.shuffle(pos_features)
-    random.shuffle(neg_features)
+    # randomize lists of feature vectors by splitting them into training, cross-validation, and test sets
+    # the ratio is 75/20/5
+    random.shuffle(positive_features)
+    random.shuffle(negative_features)
 
-    num_pos_train = int(round(0.75 * len(pos_features)))
-    num_neg_train = int(round(0.75 * len(neg_features)))
-    num_pos_val = int(round(0.2 * len(pos_features)))
-    num_neg_val = int(round(0.2 * len(neg_features)))
+    num_positive_train = int(round(0.75 * len(positive_features)))
+    num_negative_train = int(round(0.75 * len(negative_features)))
+    num_positive_val = int(round(0.2 * len(positive_features)))
+    num_negative_val = int(round(0.2 * len(negative_features)))
 
-    pos_train = pos_features[0:num_pos_train]
-    neg_train = neg_features[0:num_neg_train]
+    positive_train = positive_features[0:num_positive_train]
+    negative_train = negative_features[0:num_negative_train]
 
-    pos_val = pos_features[num_pos_train:(num_pos_train + num_pos_val)]
-    neg_val = neg_features[num_neg_train:(num_neg_train + num_neg_val)]
+    positive_val = positive_features[num_positive_train:(num_positive_train + num_positive_val)]
+    negative_val = negative_features[num_negative_train:(num_negative_train + num_negative_val)]
 
-    pos_test = pos_features[(num_pos_train + num_pos_val):]
-    neg_test = neg_features[(num_neg_train + num_neg_val):]
+    positive_test = positive_features[(num_positive_train + num_positive_val):]
+    negative_test = negative_features[(num_negative_train + num_negative_val):]
 
-    print("{} samples in positive training set.".format(len(pos_train)))
-    print("{} samples in positive cross-validation set.".format(len(pos_val)))
-    print("{} samples in positive test set.".format(len(pos_test)))
-    print("{} total positive samples.\n".format(len(pos_train) + len(pos_val) + len(pos_test)))
+    print("Randomized images into training, cross-validation, and test sets.\n")
+    print("{} images in positive training set.".format(len(positive_train)))
+    print("{} images in positive cross-validation set.".format(len(positive_val)))
+    print("{} images in positive test set.".format(len(positive_test)))
+    print("{} total positive images.\n".format(len(positive_train) + len(positive_val) + len(positive_test)))
+    print("{} images in negative training set.".format(len(negative_train)))
+    print("{} images in negative cross-validation set.".format(len(negative_val)))
+    print("{} images in negative test set.".format(len(negative_test)))
+    print("{} total negative images.\n".format(len(negative_train) + len(negative_val) + len(negative_test)))
 
-    print("{} samples in negative training set.".format(len(neg_train)))
-    print("{} samples in negative cross-validation set.".format(len(neg_val)))
-    print("{} samples in negative test set.".format(len(neg_test)))
-    print("{} total negative samples.\n".format(len(neg_train) + len(neg_val) + len(neg_test)))
-
-    # Store sample data and parameters in dict.
-    # Descriptor class object seems to produce errors when unpickling and
-    # has been commented out below. The descriptor will be re-instantiated
-    # by the Detector object later.
+    # store data and parameters in a dictionary
     feature_data = {
-        "pos_train": pos_train,
-        "neg_train": neg_train,
-        "pos_val": pos_val,
-        "neg_val": neg_val,
-        "pos_test": pos_test,
-        "neg_test": neg_test,
+        "positive_train": positive_train,
+        "negative_train": negative_train,
+        "positive_val": positive_val,
+        "negative_val": negative_val,
+        "positive_test": positive_test,
+        "negative_test": negative_test,
         "scaler": scaler,
-        "hog_features": hog_features,
-        "hist_features": hist_features,
-        "spatial_features": spatial_features,
+        "hog": hog,
+        "histogram": histogram,
+        "spatial": spatial,
         "color_space": color_space,
-        "cv_color_const": cv_color_const,
+        "color_const": color_const,
         "channels": channels,
-        "size": size,
+        "hog_size": hog_size,
         "hog_bins": hog_bins,
-        "cell_size": pix_per_cell,
+        "cell_size": cell_size,
         "cells_per_block": cells_per_block,
-        "hist_bins": hist_bins,
+        "histogram_bins": histogram_bins,
         "spatial_size": spatial_size,
         "num_features": num_features
     }
@@ -144,91 +133,88 @@ def process_files(pos_dir, neg_dir, color_space="bgr", channels=[0, 1, 2], hog_f
     return feature_data
 
 
-def train_svm(filepath=None, feature_data=None, C=1, dual=False, fit_intercept=False,
+def train_svm(file_path=None, feature_data=None, C=1, dual=False, fit_intercept=False,
               output_file=False, output_filename=None):
-    print("Loading sample data.")
-    if filepath is not None:
-        filepath = os.path.abspath(filepath)
-        if not os.path.isfile(filepath):
-            raise FileNotFoundError("File " + filepath + " does not exist.")
-        feature_data = pickle.load(open(filepath, "rb"))
+    if file_path is not None:
+        file_path = os.path.abspath(file_path)
+        if not os.path.isfile(file_path):
+            raise FileNotFoundError("File " + file_path + " not found.")
+        feature_data = pickle.load(open(file_path, "rb"))
     elif feature_data is None:
-        raise ValueError("Invalid feature data supplied.")
+        raise ValueError("Invalid feature data.")
 
-    # Train classifier on training set.
-    pos_train = np.asarray(feature_data["pos_train"])
-    neg_train = np.asarray(feature_data["neg_train"])
-    pos_val = np.asarray(feature_data["pos_val"])
-    neg_val = np.asarray(feature_data["neg_val"])
-    pos_test = np.asarray(feature_data["pos_test"])
-    neg_test = np.asarray(feature_data["neg_test"])
+    # train model on training set
+    positive_train = np.asarray(feature_data["positive_train"])
+    negative_train = np.asarray(feature_data["negative_train"])
+    positive_val = np.asarray(feature_data["positive_val"])
+    negative_val = np.asarray(feature_data["negative_val"])
+    positive_test = np.asarray(feature_data["positive_test"])
+    negative_test = np.asarray(feature_data["negative_test"])
 
-    train_set = np.vstack((pos_train, neg_train))
-    train_labels = np.concatenate(
-        (np.ones(pos_train.shape[0],), np.zeros(neg_train.shape[0],)))
+    train_set = np.vstack((positive_train, negative_train))
+    train_labels = np.concatenate((np.ones(positive_train.shape[0],), np.zeros(negative_train.shape[0],)))
 
-    print("Training classifier...")
-    start_time = time.time()
-    classifier = svm.LinearSVC(C=C, dual=dual, fit_intercept=fit_intercept)
-    classifier.fit(train_set, train_labels)
-    print("Classifier trained in {:.1f} s.\n".format(time.time() - start_time))
+    time_begin = time.time()
+    model = svm.LinearSVC(C=C, dual=dual, fit_intercept=fit_intercept)
+    model.fit(train_set, train_labels)
+    print("Model train completed in {:.1f} s.\n".format(time.time() - time_begin))
 
-    # Run classifier on cross-validation set.
-    pos_val_predicted = classifier.predict(pos_val)
-    neg_val_predicted = classifier.predict(neg_val)
+    # cross-validation set
+    positive_val_predicted = model.predict(positive_val)
+    negative_val_predicted = model.predict(negative_val)
 
-    false_neg_val = np.sum(pos_val_predicted != 1)
-    false_pos_val = np.sum(neg_val_predicted == 1)
-    pos_predict_accuracy = 1 - (false_neg_val / float(pos_val.shape[0]))
-    neg_predict_accuracy = 1 - (false_pos_val / float(neg_val.shape[0]))
-    total_accuracy = 1 - ((false_neg_val + false_pos_val) / float(pos_val.shape[0] + neg_val.shape[0]))
+    false_negative_val = np.sum(positive_val_predicted != 1)
+    false_positive_val = np.sum(negative_val_predicted == 1)
+    positive_predict_accuracy = 1 - (false_negative_val / float(positive_val.shape[0]))
+    negative_predict_accuracy = 1 - (false_positive_val / float(negative_val.shape[0]))
+    total_accuracy = 1 - ((false_negative_val + false_positive_val) / float(positive_val.shape[0] +
+                                                                            negative_val.shape[0]))
 
-    print("Val set false negatives: {} / {} ({:.3}% accuracy)".format(
-        false_neg_val, pos_val.shape[0], 100 * pos_predict_accuracy))
-    print("Val set false positives: {} / {} ({:.3f}% accuracy)".format(
-        false_pos_val, neg_val.shape[0], 100 * neg_predict_accuracy))
-    print("Val set total misclassifications: {} / {} ({:.3f}% accuracy)\n".format(
-        false_neg_val + false_pos_val, pos_val.shape[0] + neg_val.shape[0],
+    print("Validation set false negatives: {} / {} ({:.3}% accuracy)".format(
+        false_negative_val, positive_val.shape[0], 100 * positive_predict_accuracy))
+    print("Validation set false positives: {} / {} ({:.3f}% accuracy)".format(
+        false_positive_val, negative_val.shape[0], 100 * negative_predict_accuracy))
+    print("Validation set total wrong classifications: {} / {} ({:.3f}% accuracy)\n".format(
+        false_negative_val + false_positive_val, positive_val.shape[0] + negative_val.shape[0],
         100 * total_accuracy))
 
-    # Retrain classifier with misses from validation set. Run on test set.
-    print("Augmenting training set with misclassified validation samples and " + "retraining classifier.\n")
-    pos_train = np.vstack((pos_train, pos_val[pos_val_predicted != 1, :]))
-    neg_train = np.vstack((neg_train, neg_val[neg_val_predicted == 1, :]))
-    train_set = np.vstack((pos_train, neg_train))
-    train_labels = np.concatenate(
-        (np.ones(pos_train.shape[0],), np.zeros(neg_train.shape[0],)))
+    # retrain model
+    positive_train = np.vstack((positive_train, positive_val[positive_val_predicted != 1, :]))
+    negative_train = np.vstack((negative_train, negative_val[negative_val_predicted == 1, :]))
+    train_set = np.vstack((positive_train, negative_train))
+    train_labels = np.concatenate((np.ones(positive_train.shape[0],), np.zeros(negative_train.shape[0],)))
 
-    classifier.fit(train_set, train_labels)
+    model.fit(train_set, train_labels)
 
-    pos_test_predicted = classifier.predict(pos_test)
-    neg_test_predicted = classifier.predict(neg_test)
+    positive_test_predicted = model.predict(positive_test)
+    negative_test_predicted = model.predict(negative_test)
 
-    false_neg_test = np.sum(pos_test_predicted != 1)
-    false_pos_test = np.sum(neg_test_predicted == 1)
-    pos_predict_accuracy = 1 - (false_neg_test / float(pos_test.shape[0]))
-    neg_predict_accuracy = 1 - (false_pos_test / float(neg_test.shape[0]))
-    total_accuracy = 1 - ((false_neg_test + false_pos_test) / float(pos_test.shape[0] + neg_test.shape[0]))
+    false_negative_test = np.sum(positive_test_predicted != 1)
+    false_positive_test = np.sum(negative_test_predicted == 1)
+    positive_predict_accuracy = 1 - (false_negative_test / float(positive_test.shape[0]))
+    negative_predict_accuracy = 1 - (false_positive_test / float(negative_test.shape[0]))
+    total_accuracy = 1 - ((false_negative_test + false_positive_test) / float(positive_test.shape[0] +
+                                                                              negative_test.shape[0]))
 
+    print("Model retrained.\n")
     print("Test set false negatives: {} / {} ({:.3}% accuracy)".format(
-        false_neg_test, pos_test.shape[0], 100 * pos_predict_accuracy))
+        false_negative_test, positive_test.shape[0], 100 * positive_predict_accuracy))
     print("Test set false positives: {} / {} ({:.3f}% accuracy)".format(
-        false_pos_test, neg_test.shape[0], 100 * neg_predict_accuracy))
+        false_positive_test, negative_test.shape[0], 100 * negative_predict_accuracy))
     print("Test set total misclassifications: {} / {} ({:.3f}% accuracy)".format(
-        false_neg_test + false_pos_test, pos_test.shape[0] + neg_test.shape[0],
+        false_negative_test + false_positive_test, positive_test.shape[0] + negative_test.shape[0],
         100 * total_accuracy))
 
-    # Store classifier data and parameters in new dict that excludes
-    # sample data from feature_data dict.
-    exclude_keys = ("pos_train", "neg_train", "pos_val", "neg_val", "pos_test", "neg_test")
-    classifier_data = {key: val for key, val in feature_data.items() if key not in exclude_keys}
-    classifier_data["classifier"] = classifier
+    # create a new dict that excludes image data from feature_data dict
+    exclude_keys = ("positive_train", "negative_train", "positive_val", "negative_val", "positive_test",
+                    "negative_test")
+    model_data = {key: val for key, val in feature_data.items() if key not in exclude_keys}
+    model_data["model"] = model
 
     if output_file:
         if output_filename is None:
-            output_filename = (datetime.now().strftime("%Y%m%d%H%M") + "_classifier.pkl")
+            output_filename = "temp_model.pkl"
 
-        pickle.dump(classifier_data, open(output_filename, "wb"))
-        print("\nSVM classifier data saved to {}".format(output_filename))
+        pickle.dump(model_data, open(output_filename, "wb"))
 
-    return classifier_data
+    return model_data
